@@ -6,68 +6,94 @@
     <title>Hitung HPP Berat Buah</title>
     <script src="https://cdn.tailwindcss.com"></script>
   </head>
-  <body class="flex items-center justify-center min-h-screen bg-gray-100">
-    <div class="bg-white p-6 rounded-lg shadow-md w-96">
-      <h2 class="text-xl font-semibold mb-4 text-center">
+  <body
+    class="flex items-center justify-center min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-4"
+  >
+    <div
+      class="bg-white/90 backdrop-blur-sm p-8 rounded-xl shadow-xl w-full max-w-md mx-auto"
+    >
+      <h2 class="text-2xl font-bold mb-0 text-center text-gray-800">
         Kalkulator HPP Berat Buah
       </h2>
-      <div class="mb-2">
-        <label class="block text-sm font-medium"
-          >Berat Buah Sebelum Potong (gram)</label
+      <p class="text-sm text-center mb-6 text-gray-400">
+        Perhitungan
+        <span class="text-gray-600">Harga Pokok Penjualan (HPP)</span>
+        berdasarkan berat buah.
+        <span class="text-red-400">Bukan harga Jual!</span>
+      </p>
+      <form onsubmit="calculateHPP(event)" class="space-y-4">
+        <div class="space-y-1">
+          <label class="block text-sm font-medium text-gray-700">
+            Berat Buah Sebelum Potong (gram)
+          </label>
+          <input
+            type="number"
+            id="beforeWeight"
+            class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+            placeholder="Masukkan berat"
+            required
+          />
+        </div>
+        <div class="space-y-1">
+          <label class="block text-sm font-medium text-gray-700">
+            Harga Buah Sebelum Potong
+          </label>
+          <div class="relative">
+            <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500"
+              >Rp</span
+            >
+            <input
+              type="number"
+              id="beforePrice"
+              class="w-full p-3 pl-8 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+              placeholder="Masukkan harga"
+              required
+            />
+          </div>
+        </div>
+        <div class="space-y-1">
+          <label class="block text-sm font-medium text-gray-700">
+            Berat Setelah Dipotong (gram)
+          </label>
+          <input
+            type="number"
+            id="afterWeight"
+            class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+            placeholder="Masukkan berat"
+            required
+          />
+        </div>
+        <div class="space-y-1">
+          <label class="block text-sm font-medium text-gray-700">
+            Berat Masuk Kemasan (gram)
+          </label>
+          <input
+            type="number"
+            id="packageWeight"
+            class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+            placeholder="Masukkan berat"
+            required
+          />
+        </div>
+        <button
+          type="submit"
+          class="w-full bg-gradient-to-r from-blue-500 to-blue-600 text-white py-3 px-4 rounded-lg font-medium hover:from-blue-600 hover:to-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transform transition-all active:scale-95 shadow-md"
         >
-        <input
-          type="number"
-          id="beforeWeight"
-          class="w-full p-2 border rounded"
-          placeholder="Masukkan berat"
-        />
-      </div>
-      <div class="mb-2">
-        <label class="block text-sm font-medium"
-          >Harga Buah Sebelum Potong</label
-        >
-        <input
-          type="number"
-          id="beforePrice"
-          class="w-full p-2 border rounded"
-          placeholder="Masukkan harga"
-        />
-      </div>
-      <div class="mb-2">
-        <label class="block text-sm font-medium"
-          >Berat Setelah Dipotong (gram)</label
-        >
-        <input
-          type="number"
-          id="afterWeight"
-          class="w-full p-2 border rounded"
-          placeholder="Masukkan berat"
-        />
-      </div>
-      <div class="mb-2">
-        <label class="block text-sm font-medium"
-          >Berat Masuk Kemasan (gram)</label
-        >
-        <input
-          type="number"
-          id="packageWeight"
-          class="w-full p-2 border rounded"
-          placeholder="Masukkan berat"
-        />
-      </div>
-      <button
-        onclick="calculateHPP()"
-        class="w-full bg-blue-500 text-white py-2 rounded mt-3 hover:bg-blue-600"
-      >
-        Hitung HPP
-      </button>
-      <div class="mt-4 text-center font-bold text-lg">
-        Harga Masuk Kemasan: <span id="result">-</span>
+          Hitung HPP
+        </button>
+      </form>
+      <div class="mt-6 p-4 bg-blue-50 rounded-lg">
+        <p class="text-gray-600 text-sm mb-1">Hasil Perhitungan:</p>
+        <div class="text-center font-bold text-xl text-blue-600" id="result">
+          Rp 0
+        </div>
       </div>
     </div>
 
     <script>
-      function calculateHPP() {
+      function calculateHPP(event) {
+        event.preventDefault();
+
         const beforeWeight =
           parseFloat(document.getElementById("beforeWeight").value) || 0;
         const beforePrice =
@@ -87,13 +113,16 @@
           return;
         }
 
-        const pricePerGram = beforePrice / beforeWeight; // Harga per gram sebelum dipotong
-        const newPricePerGram = beforePrice / afterWeight; // Harga per gram setelah dipotong
-        const packagePrice = newPricePerGram * packageWeight; // Harga masuk kemasan
+        const pricePerGram = beforePrice / beforeWeight;
+        const newPricePerGram = beforePrice / afterWeight;
+        const packagePrice = newPricePerGram * packageWeight;
 
         document.getElementById(
           "result"
-        ).innerText = `Rp ${packagePrice.toFixed(2)}`;
+        ).innerText = `Rp ${packagePrice.toLocaleString("id-ID", {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2,
+        })}`;
       }
     </script>
   </body>
